@@ -1,0 +1,76 @@
+
+<div>
+  <form phx-submit="add_comment">
+    <div class="field">
+      <label class="label is-large">Ask</label>
+      <div class="control">
+        <textarea method="post" class="textarea is-medium" name="input" value="<%= @input %>" placeholder="e.g. Kio estas 'Hello world'? " <%= if @loading, do: "readonly" %> ></textarea>
+      </div>
+    </div>
+    <button type="submit" name="action">ADD</button>
+  </form>
+
+  <form phx-submit="explosion">
+    <button type="submit" name="">stop</button>
+  </form>
+
+  <form phx-change="search">
+    <label class="label is-large" >Search</label>
+    <div class="control">
+      <input class="input is-primary" type="text" name="search" value="<%= @search %>" placeholder="you can search FAQ.">
+    </div>
+  </form>
+
+  <table class="table">
+    <thread>
+      <tr>
+        <th>文面</th>
+        <th>いつごろ</th>
+      </tr>
+</thead>
+
+<tbody>
+  <%= for c  <- @similars do %>
+      <tr>
+        <td> <%= c.text %> </td>
+        <td> <%= c.relative_str %> </td>
+      </tr>
+      <% end %>
+</tbody>
+</table>
+
+<table class="table">
+  <thead>
+
+    <tr>
+      <th>Comment</th>
+      <th>When</th>
+      <th>Utils</th>
+    <tr>
+  </thead>
+
+  <tbody>
+    <%= for c <- @comments do %>
+        <tr>
+          <td> <%= c.text %> </td>
+          <td> <%= c.relative_str %> </td>
+          <td>
+            <div class="field has-addons">
+              <p class="control">
+                <button phx-click="delete_comment" phx-value="<%= c.id %>">del</button>
+              </p>
+              <p class="control">
+                <a class="button is-primary" onclick="location.href='<%= "/cards/#{c.id}" %> '">
+                  <span class="icon">
+                    <i class="fas fa-eye"></i>
+                  </span>
+                  <span>open</span>
+                </a>
+              </p>
+    </div>
+    </td>
+    </tr>
+
+    <% end %>
+ </table>
+ </div>
