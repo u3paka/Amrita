@@ -6,7 +6,7 @@ defmodule Amrita.Posts do
   import Ecto.Query, warn: false
   alias Amrita.Repo
 
-  alias Amrita.Posts.Note
+  alias Amrita.Posts.{Note, Comment}
 
   @doc """
   Returns the list of notes.
@@ -100,5 +100,76 @@ defmodule Amrita.Posts do
   """
   def change_note(%Note{} = note) do
     Note.changeset(note, %{})
+  end
+
+  #-------
+  # COMMENT
+  #-------
+
+  @doc """
+  Returns the list of notes.
+
+  ## Examples
+
+  iex> list_notes()
+  [%Note{}, ...]
+
+  """
+  def list_comments do
+    Repo.all(Comment)
+  end
+
+  @doc """
+  Gets a single note.
+
+  Raises `Ecto.NoResultsError` if the Note does not exist.
+
+  ## Examples
+
+  iex> get_note!(123)
+  %Note{}
+
+  iex> get_note!(456)
+  ** (Ecto.NoResultsError)
+
+  """
+  def get_comment!(id), do: Repo.get!(Comment, id)
+
+  @doc """
+  Creates a comment.
+
+  ## Examples
+
+  iex> create_note(%{field: value})
+  {:ok, %Note{}}
+
+  iex> create_note(%{field: bad_value})
+  {:error, %Ecto.Changeset{}}
+
+  """
+  def create_comment(attrs \\ %{}) do
+    %Comment{}
+    |> Comment.changeset(attrs)
+    |> Repo.insert()
+  end
+
+
+  @doc """
+  Associate Replies.
+
+  put_assoc %Note{} to :replies of a given %Note{}.
+
+  ## Examples
+
+  aaiex> reply_note(note, reply)
+  %Ecto.Changeset{source: %Note{}}
+
+  """
+  def reply_comment(%Comment{} = comment, %Comment{} = reply) do
+  comment
+    |> Repo.preload([:replies, :original_comment])
+    |> Ecto.Changeset.change
+    |> Ecto.Changeset.put_assoc(:replies, [reply | comment.replies])
+    |> Repo.update
   end
 end

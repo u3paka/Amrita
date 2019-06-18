@@ -20,7 +20,8 @@ defmodule Amrita.Accounts.User do
     |> Repo.preload(:notes)
     |> cast(attrs, [:username, :name, :email])
     |> cast_assoc(:notes, with: &Posts.Note.changeset/2)
-    |> validate_required([:username, :name])
+    |> validate_required([:username])
     |> unique_constraint(:username)
+    |> unique_constraint(:email)
   end
 end

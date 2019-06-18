@@ -2,6 +2,7 @@ defmodule Amrita.Posts.Comment do
   use Amrita.Schema
   import Ecto.Changeset
 
+  alias Amrita.Repo
   alias Amrita.Accounts.{User}
   alias Amrita.Posts.{Note, Comment}
 
@@ -25,15 +26,10 @@ defmodule Amrita.Posts.Comment do
   @doc false
   def changeset(note, attrs) do
     note
+    |> Repo.preload([:user, :note, :replies, :original_comment])
     |> cast(attrs, [:message])
-    |> validate_required([:user, :note, :message])
-  end
-
-  def reply(post, reply) do
-    post
-    |> Repo.preload([:replies, :original_comment])
-    |> Ecto.Changeset.change
-    |> Ecto.Changeset.put_assoc(:replies, [reply | post.replies])
-    |> Repo.update
+    |> cast_assoc(:user)
+    |> cast_assoc(:replies)
+    |> validate_required([:user, :message])
   end
 end

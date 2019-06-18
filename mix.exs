@@ -47,7 +47,8 @@ defmodule Amrita.MixProject do
       {:timex, "~> 3.1"},
       {:gen_stage, "~> 0.14"},
       {:flow, "~> 0.14"},
-      {:mecab, "~> 1.0"}
+      {:mecab, "~> 1.0"},
+      {:mantra, github: "u3paka/mantra"}
     ]
   end
 
